@@ -16,7 +16,7 @@ router.post('/', (req, res) => {
     email: email_,
     age: 20,
     posts: null,
-    user_image: null
+    image_extension: null
   });
 
   new_user.save(function(err, resp){

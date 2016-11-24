@@ -6,9 +6,15 @@ import isAuthorized from '../isAuthorized';
 
 import './style.css';
 
-class Main extends Component {
+const Main = React.createClass({
+  getInitialState() {
+    isAuthorized(this);
+    return {
+      isAuthorized: false
+    }
+  },
   render() {
-    console.log(isAuthorized);
+    console.log(this.state.isAuthorized);
     const {className, ...props} = this.props;
     return (
       <div className={classnames('Main', className)}{...props}>
@@ -16,6 +22,6 @@ class Main extends Component {
       </div>
     );
   }
-}
+});
 
 export default Main;

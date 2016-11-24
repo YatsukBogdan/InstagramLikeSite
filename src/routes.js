@@ -11,7 +11,7 @@ import RestorePassword from './components/RestorePassword';
 import User from './components/User';
 
 const Routes = (props) => (
-  <Router {...props}>
+  <Router {...props} >
     <Route path="/" component={Main} />
     <Route path="/login" component={Login} />
     <Route path="/register" component={Register} />

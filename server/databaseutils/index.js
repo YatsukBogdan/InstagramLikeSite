@@ -23,7 +23,8 @@ var UserSchema = new Schema({
   email: String,
   age: Number,
   user_image: String,
-  posts: [{post_id: Number}]
+  posts: [{post_id: Number}],
+  image_extension: String
 });
 
 var UserConnectionSchema = new Schema ({

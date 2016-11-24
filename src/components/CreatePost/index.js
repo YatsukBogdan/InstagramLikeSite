@@ -6,18 +6,17 @@ import RestorePasswordForm from './RestorePasswordForm.js';
 
 import './style.css';
 
-class CreatePost extends Component {
-
+const CreatePostModule = React.createClass({
   render() {
     console.log(this.props.params.key);
     const {className, ...props} = this.props;
     return (
-      <div className={classnames('RestorePassword', className)}{...props}>
+      <div className={classnames('CreatePost', className)}{...props}>
         <Header />
         <RestorePasswordForm permissionKey={this.props.params.key}/>
       </div>
     );
   }
-}
+});
 
 export default RestorePassword;

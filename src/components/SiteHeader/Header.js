@@ -2,14 +2,32 @@ import React from 'react';
 import { Link } from 'react-router'
 import './style.css';
 
+import $ from 'jquery';
+
 import isAuthorized from '../isAuthorized';
 
 const Header = React.createClass({
+  getInitialState() {
+    isAuthorized(this);
+    return {
+      isAuthorized: false
+    }
+  },
+  logout() {
+    $.post(
+      '/logout',
+      {},
+      (res) => {
+        console.log(res);
+        isAuthorized(this);
+      }
+    );
+  },
   renderLoginBlock() {
-    if (isAuthorized) {
+    if (this.state.isAuthorized) {
       return (
         <p className="col-md-1 header-text">
-          <Link to='/logout'><a className="site-ref" id="login-ref">Logout</a></Link>
+          <a className="site-ref" id="login-ref" href="/" onClick={(e) => this.logout(e)}>Logout</a>
         </p>
       );
     } else {

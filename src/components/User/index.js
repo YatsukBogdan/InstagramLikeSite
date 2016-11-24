@@ -6,18 +6,32 @@ import $ from 'jquery';
 import Header from '../SiteHeader/Header.js';
 import UserImageBlock from './UserImageBlock.js';
 import UserData from './UserData.js';
+import CreatePostModule from './CreatePostModule.js';
+
+import isAuthorized from '../isAuthorized';
 
 import './style.css';
 
 const User = React.createClass({
-  getInitialState() {
+  componentDidMount() {
     this.checkUserExist();
     this.loadUserData();
+    isAuthorized(this);
+  },
+  openModule() {
+    this.setState({moduleVisible: true});
+  },
+  closeModule() {
+    this.setState({moduleVisible: false});
+  },
+  getInitialState() {
     return {
+      isAuthorized: false,
       userexist: false,
       email: '',
       age: 0,
-      posts: []
+      posts: [],
+      moduleVisible: false
     }
   },
   loadUserData() {
@@ -52,7 +66,8 @@ const User = React.createClass({
         <div className="container">
           <UserImageBlock username={this.props.params.username}/>
           <UserData username={this.props.params.username} age={this.state.age} email={this.state.email}/>
-          <Link to="/createpost"><a>Create post</a></Link>
+          <button onClick={e => this.openModule(e)}>Add post</button>
+          <CreatePostModule visible={this.state.moduleVisible} closeModule={this.closeModule}/>
         </div>
       );
     } else {
