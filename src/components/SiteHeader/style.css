@@ -1,0 +1,30 @@
+#header {
+    display: flex;
+    height: 75px;
+    background-color: #3e454c;
+    color: white;
+}
+
+#header-main-text {
+    font-size: 50px;
+}
+
+.header-text {
+    padding-top: 0.7em;
+    margin-left: 1em;
+    font-size: 27px;
+}
+
+.site-ref {
+    text-decoration: none;
+    color: white;
+}
+
+.site-ref:hover {
+    text-decoration: none;
+    color: white;
+}
+
+#login-ref {
+
+}
