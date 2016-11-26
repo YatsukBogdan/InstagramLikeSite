@@ -1,19 +1,21 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var CommentSchema = new Schema({
+  username: Number,
+  likes: Number,
+  date: Date,
+  body: String
+});
+
 var PostSchema = new Schema({
   id: Number,
-  image: String,
   likes: Number,
   watches: Number,
-  comments: [{
-    user_id: Number,
-    likes: Number,
-    date: Date,
-    body: String
-  }],
-  author_id: Number,
-  author_sign: String
+  comments: [CommentSchema],
+  date: Date,
+  author_sign: String,
+  img_path: String
 });
 
 var UserSchema = new Schema({
@@ -22,8 +24,8 @@ var UserSchema = new Schema({
   passwordHash: String,
   email: String,
   age: Number,
-  user_image: String,
-  posts: [{post_id: Number}],
+  posts: [PostSchema],
+  tmp_post_extension: String,
   image_extension: String
 });
 
@@ -35,12 +37,10 @@ var UserConnectionSchema = new Schema ({
 
 var connection = mongoose.createConnection('mongodb://localhost:27017/hp');
 
-var post = connection.model('post', PostSchema);
 var user = connection.model('user', UserSchema);
 var userConnection = connection.model('userConnection', UserConnectionSchema);
 
 module.exports = {
   user: user,
-  post: post,
   userConnection: userConnection
 };

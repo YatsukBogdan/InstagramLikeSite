@@ -33,10 +33,8 @@ const LoginForm = React.createClass({
               <input type="password" name="password" id="password" />
           </label>
 
-          <input type="checkbox" name="remember" id="remember" />
-          <label className="check" for="remember">Remember Me</label>
 
-          <button onClick={(e) => this.loginUser(e)} type="button">Login</button>
+          <button id="login-button" onClick={(e) => this.loginUser(e)} type="button">Login</button>
           <p>
             <Link to="/forgotpassword"><a id="login-ref">Forgot password</a></Link>
           </p>

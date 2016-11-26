@@ -4,12 +4,12 @@ var path = require('path');
 var md5 = require('js-md5');
 var user = require('../databaseutils').user;
 
-router.get('/:username', (req, res) => {
+router.get('/:username/:id', (req, res) => {
   user.findOne({
     username: req.params.username
   }, (err, user) => {
     if (user){
-      res.sendFile(path.join(__dirname, '../public/userimages', md5(req.params.username) + '.' + user.image_extension));
+      res.sendFile(path.join(__dirname, '../public', user.posts[req.params.id].img_path));
     }
   });
 });

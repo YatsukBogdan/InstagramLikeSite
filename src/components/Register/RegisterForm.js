@@ -51,7 +51,7 @@ const RegisterForm = React.createClass({
               <input type="password" name="password2" id="password2" />
           </label>
 
-          <button onClick={(e) => this.registerUser(e)}>Register</button>
+          <button id="register-button" onClick={(e) => this.registerUser(e)}>Register</button>
       </section>
     )
   }

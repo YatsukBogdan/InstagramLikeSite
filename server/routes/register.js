@@ -15,8 +15,9 @@ router.post('/', (req, res) => {
     passwordHash: passHash,
     email: email_,
     age: 20,
-    posts: null,
-    image_extension: null
+    posts: [],
+    image_extension: null,
+    tmp_post_extension: null
   });
 
   new_user.save(function(err, resp){

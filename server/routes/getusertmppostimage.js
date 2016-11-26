@@ -9,7 +9,7 @@ router.get('/:username', (req, res) => {
     username: req.params.username
   }, (err, user) => {
     if (user){
-      res.sendFile(path.join(__dirname, '../public/userimages', md5(req.params.username) + '.' + user.image_extension));
+      res.sendFile(path.join(__dirname, '../public/userpostimages', md5(req.params.username + 'tmp') + '.' + user.tmp_post_extension));
     }
   });
 });

@@ -7,6 +7,7 @@ import Register from './components/Register';
 import About from './components/About';
 import NotFound from './components/NotFound';
 import ForgotPassword from './components/ForgotPassword';
+import FindUsers from './components/FindUsers';
 import RestorePassword from './components/RestorePassword';
 import User from './components/User';
 
@@ -15,6 +16,7 @@ const Routes = (props) => (
     <Route path="/" component={Main} />
     <Route path="/login" component={Login} />
     <Route path="/register" component={Register} />
+    <Route path="/findusers/:word" component={FindUsers} />
     <Route path="/about" component={About} />
     <Route path="/forgotpassword" component={ForgotPassword} />
     <Route path="/restorepassword/:key" component={RestorePassword} />

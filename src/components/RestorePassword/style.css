@@ -32,20 +32,6 @@ body {
 /*
  * Styling the container for the login form.
  */
- .register {
- 	width:400px;
-   height: 610px;
- 	padding:25px;
- 	margin:50px auto;
- 	background-color:#3e454c;
- }
-.login {
-	width:350px;
-    height: 410px;
-	padding:25px;
-	margin:50px auto;
-	background-color:#3e454c;
-}
 .register-errors {
     font-size: 14px;
  }

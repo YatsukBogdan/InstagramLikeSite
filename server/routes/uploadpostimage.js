@@ -10,30 +10,30 @@ var user = require('../databaseutils').user;
 //var upload = multer({ dest: './upload' });
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'server/public/userimages/');
+    cb(null, 'server/public/userpostimages/');
   },
   filename: function (req, file, cb) {
     user.findOne({
       username: req.session.username
     }, (err, this_user)=> {
       if (this_user) {
-        var usernameHash = md5(req.session.username);
+        var imageNameHash = md5(req.session.username + 'tmp');
 
-        if (this_user.image_extension == null){
-          this_user.image_extension = mime.extension(file.mimetype);
+        if (this_user.tmp_post_extension == null){
+          this_user.tmp_post_extension = mime.extension(file.mimetype);
           this_user.save(
             (res) => {
               console.log(res);
-              cb(null, usernameHash + '.' + mime.extension(file.mimetype));
+              cb(null, imageNameHash + '.' + mime.extension(file.mimetype));
             }
           );
         } else {
-          findRemoveSync(__dirname + '/../public/userimages/', {files: usernameHash + '.' + this_user.image_extension});
-          this_user.image_extension = mime.extension(file.mimetype);
+          findRemoveSync(__dirname + '/../public/userpostimages/', {files: imageNameHash + '.' + this_user.tmp_post_extension});
+          this_user.tmp_post_extension = mime.extension(file.mimetype);
           this_user.save(
             (res) => {
               console.log(res);
-              cb(null, usernameHash + '.' + mime.extension(file.mimetype));
+              cb(null, imageNameHash + '.' + mime.extension(file.mimetype));
             }
           );
         }

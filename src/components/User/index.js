@@ -6,6 +6,7 @@ import $ from 'jquery';
 import Header from '../SiteHeader/Header.js';
 import UserImageBlock from './UserImageBlock.js';
 import UserData from './UserData.js';
+import UserPosts from './UserPosts.js';
 import CreatePostModule from './CreatePostModule.js';
 
 import isAuthorized from '../isAuthorized';
@@ -17,12 +18,15 @@ const User = React.createClass({
     this.checkUserExist();
     this.loadUserData();
     isAuthorized(this);
+    this.isOwner();
   },
   openModule() {
     this.setState({moduleVisible: true});
+    document.documentElement.style.overflow = 'hidden';
   },
   closeModule() {
     this.setState({moduleVisible: false});
+    document.documentElement.style.overflow = 'auto';
   },
   getInitialState() {
     return {
@@ -31,8 +35,20 @@ const User = React.createClass({
       email: '',
       age: 0,
       posts: [],
-      moduleVisible: false
+      moduleVisible: false,
+      isOwner: false
     }
+  },
+  isOwner(){
+    $.post(
+      '/ispageowner',
+      {
+        username: this.props.params.username
+      },
+      (data) => {
+        this.setState({isOwner: data.isOwner});
+      }
+    );
   },
   loadUserData() {
     $.post(
@@ -60,14 +76,30 @@ const User = React.createClass({
       }
     );
   },
+  renderUserPosts() {
+    if (this.state.posts) {
+      return (
+        <UserPosts username={this.props.params.username} posts={this.state.posts} />
+      );
+    } else {
+      return (
+        <p>User have no posts yet</p>
+      );
+    }
+  },
   renderUserPage() {
     if (this.state.userexist){
       return (
-        <div className="container">
-          <UserImageBlock username={this.props.params.username}/>
-          <UserData username={this.props.params.username} age={this.state.age} email={this.state.email}/>
-          <button onClick={e => this.openModule(e)}>Add post</button>
-          <CreatePostModule visible={this.state.moduleVisible} closeModule={this.closeModule}/>
+        <div>
+          <div className="container">
+            <UserImageBlock username={this.props.params.username} isOwner={this.state.isOwner}/>
+            <UserData username={this.props.params.username} age={this.state.age} email={this.state.email}/>
+            {this.state.isOwner ? <button onClick={e => this.openModule(e)}>Add post</button> : ''}
+            <CreatePostModule username={this.props.params.username} visible={this.state.moduleVisible} closeModule={this.closeModule}/>
+          </div>
+          <div className="container">
+            {this.renderUserPosts()}
+          </div>
         </div>
       );
     } else {

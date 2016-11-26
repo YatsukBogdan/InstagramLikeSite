@@ -1,12 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router';
 import './style.css';
-
 import $ from 'jquery';
 
 import isAuthorized from '../isAuthorized';
 
 const Header = React.createClass({
+  componentDidMount(){
+    document.getElementById("find-user-input").addEventListener("keyup", function(event) {
+      event.preventDefault();
+      if (event.keyCode == 13) {
+        browserHistory.push('/findusers/' + document.getElementById("find-user-input").value);
+        window.location.reload();
+      }
+    });
+  },
   getInitialState() {
     isAuthorized(this);
     return {
@@ -26,7 +34,7 @@ const Header = React.createClass({
   renderLoginBlock() {
     if (this.state.isAuthorized) {
       return (
-        <p className="col-md-1 header-text">
+        <p className="col-md-3 header-text">
           <a className="site-ref" id="login-ref" href="/" onClick={(e) => this.logout(e)}>Logout</a>
         </p>
       );
@@ -47,7 +55,8 @@ const Header = React.createClass({
     return (
       <div className="container-fluid" id="header">
         <div className="container">
-          <p className="col-md-9" id="header-main-text">HolyPortfoly</p>
+          <p className="col-md-5" id="header-main-text">HolyPortfoly</p>
+          <input className="col-md-4" id='find-user-input' type="text" name='username'/>
           {this.renderLoginBlock()}
         </div>
       </div>

@@ -9,14 +9,20 @@ const multer = require('multer');
 
 var login = require('./routes/login');
 var logOut = require('./routes/logout');
+var isPageOwner = require('./routes/ispageowner');
 var register = require('./routes/register');
 var checkUserExist = require('./routes/checkuserexist');
+var findUsers = require('./routes/findUsers');
 var forgotPassword = require('./routes/forgotpassword');
 var restorePassword = require('./routes/restorepassword');
-var getUserImage = require('./routes/restorepassword');
+var getUserImage = require('./routes/getuserimage');
+var getUserPostImage = require('./routes/getuserpostimage');
+var getUserTmpPostImage = require('./routes/getusertmppostimage');
 var loadUserData = require('./routes/loaduserdata');
 var isAuthorized = require('./routes/isauthorized');
 var uploadImage = require('./routes/uploadimage');
+var uploadPostImage = require('./routes/uploadpostimage');
+var uploadPost = require('./routes/uploadpost');
 
 
 const app = express();
@@ -48,13 +54,19 @@ app.use(expressSession({
 // Always return the main index.html, so react-router render the route in the client
 app.use('/login', login);
 app.use('/logout', logOut);
+app.use('/ispageowner', isPageOwner);
 app.use('/register', register);
 app.use('/checkuserexist', checkUserExist);
 app.use('/forgotpassword', forgotPassword);
+app.use('/findusers', findUsers);
 app.use('/restorepassword', restorePassword);
 app.use('/loaduserdata', loadUserData);
 app.use('/getuserimage', getUserImage);
+app.use('/getuserpostimage', getUserPostImage);
+app.use('/getusertmppostimage', getUserTmpPostImage);
 app.use('/uploadimage', uploadImage);
+app.use('/uploadpostimage', uploadPostImage);
+app.use('/uploadpost', uploadPost);
 app.use('/isauthorized', isAuthorized);
 
 module.exports = app;
