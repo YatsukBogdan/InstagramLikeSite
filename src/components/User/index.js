@@ -36,7 +36,8 @@ const User = React.createClass({
       age: 0,
       posts: [],
       moduleVisible: false,
-      isOwner: false
+      isOwner: false,
+      restriction: 'user'
     }
   },
   isOwner(){
@@ -87,6 +88,17 @@ const User = React.createClass({
       );
     }
   },
+  deleteUser() {
+    $.post(
+      '/deleteuser',
+      {
+        username: this.props.params.username
+      },
+      (data) => {
+        console.log('user deleted');
+      }
+    );
+  },
   renderUserPage() {
     if (this.state.userexist){
       return (
@@ -95,6 +107,7 @@ const User = React.createClass({
             <UserImageBlock username={this.props.params.username} isOwner={this.state.isOwner}/>
             <UserData username={this.props.params.username} age={this.state.age} email={this.state.email}/>
             {this.state.isOwner ? <button onClick={e => this.openModule(e)}>Add post</button> : ''}
+            {this.state.restriction == 'admin' ? <button onClick={e => this.deleteUser(e)}>Delete this user</button> : ''}
             <CreatePostModule username={this.props.params.username} visible={this.state.moduleVisible} closeModule={this.closeModule}/>
           </div>
           <div className="container">

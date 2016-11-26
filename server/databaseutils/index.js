@@ -26,13 +26,15 @@ var UserSchema = new Schema({
   age: Number,
   posts: [PostSchema],
   tmp_post_extension: String,
-  image_extension: String
+  image_extension: String,
+  restriction: String
 });
 
 var UserConnectionSchema = new Schema ({
   username: String,
   token: String,
-  expire: Number
+  expire: Number,
+  restriction: String
 });
 
 var connection = mongoose.createConnection('mongodb://localhost:27017/hp');

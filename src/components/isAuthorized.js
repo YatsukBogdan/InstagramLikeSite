@@ -6,6 +6,8 @@ function isAuthorized(component) {
     {},
     (res) => {
       component.setState({isAuthorized: res.isAuthorized});
+      component.setState({username: res.username});
+      component.setState({restriction: res.restriction});
     }
   );
 }

@@ -9,7 +9,9 @@ router.post('/', (req, res) => {
   console.log('log: isAuthorized:' + uname);
   if (token == undefined){
     res.json({
-      isAuthorized: false
+      isAuthorized: false,
+      username: uname,
+      restriction: 'guest'
     });
     return;
   }
@@ -19,23 +21,31 @@ router.post('/', (req, res) => {
   }, (err, connection) => {
     if (err){
       res.json({
-        isAuthorized: false
+        isAuthorized: false,
+        username: uname,
+        restriction: connection.restriction
       });
       return;
     }
     if (connection) {
       if (token == connection.token){
         res.json({
-          isAuthorized: true
+          isAuthorized: true,
+          username: uname,
+          restriction: connection.restriction
         });
       } else {
         res.json({
-          isAuthorized: false
+          isAuthorized: false,
+          username: uname,
+          restriction: connection.restriction
         });
       }
     } else {
       res.json({
-        isAuthorized: false
+        isAuthorized: false,
+        username: uname,
+        restriction: connection.restriction
       });
     }
   });

@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var md5 = require('js-md5');
+var fs = require('fs');
+var path = require('path');
 var user = require('../databaseutils').user;
 
 router.post('/', (req, res) => {
@@ -16,10 +18,13 @@ router.post('/', (req, res) => {
     email: email_,
     age: 20,
     posts: [],
-    image_extension: null,
-    tmp_post_extension: null
+    image_extension: 'png',
+    tmp_post_extension: null,
+    restriction: 'user'
   });
 
+  fs.writeFileSync(path.join(__dirname, '../public/userimages', md5(req.body.username) + '.png'),
+                   fs.readFileSync(path.join(__dirname, '../public', 'default-user-image.png')));
   new_user.save(function(err, resp){
     console.log('cool');
     res.json({

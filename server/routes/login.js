@@ -39,7 +39,8 @@ router.post('/', (req, res) => {
         } else {
           var new_user_connection = new userConnection({
             username: uname,
-            token: token
+            token: token,
+            restriction: user.restriction
           });
 
           new_user_connection.save((err) => {
