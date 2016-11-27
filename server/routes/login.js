@@ -7,44 +7,47 @@ var userConnection = require('../databaseutils').userConnection;
 
 const superSecret = "asd3tg9*(53lj!@$RG.Shsfh).hsa6261y%&%_)&";
 
+const LOG_PREFIX = 'LOGIN ROUTE';
+function getCurrentTime() {
+    return new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+}
+function logMessage(msg) {
+  console.log(getCurrentTime() + '     ' + LOG_PREFIX + '     ' + msg);
+}
+
 router.post('/', (req, res) => {
-  const uname = req.body.username;
-  const pass = req.body.password;
-  var passHash = md5(pass);
+  const req_username = req.body.username;
+  const req_passwordHash = req.body.passwordHash;
 
   user.findOne({
-    username: uname,
-    passwordHash: passHash
+    username: req_username,
+    passwordHash: req_passwordHash
   }, function(err, user) {
     if (user){
       userConnection.findOne({
-        username: uname
+        username: req_username
       }, (err, connection) =>{
         var token = jwt.sign(user, superSecret, {
           expiresIn: 60*60*24
         });
-        req.session.username = uname;
+
+        req.session.username = req_username;
         req.session.token = token;
 
         if (connection) {
-          userConnection.update({
-            username: uname
-          }, {
-            $set: {
-              token: token
-            }
-          }, (err, resp) => {
-            console.log(resp);
+          connection.token = token;
+          connection.save((err) => {
+            logMessage('Connection updated');
           });
         } else {
           var new_user_connection = new userConnection({
-            username: uname,
+            username: req_username,
             token: token,
             restriction: user.restriction
           });
 
           new_user_connection.save((err) => {
-            console.log('New connection created.');
+            logMessage('New connection created.');
           });
         }
         res.json({
@@ -52,7 +55,7 @@ router.post('/', (req, res) => {
         });
       });
     } else {
-      console.log('Login failed.');
+      logMessage('Login failed.');
       res.json({
         logined: false
       });

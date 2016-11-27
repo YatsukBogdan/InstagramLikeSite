@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var user = require('../databaseutils').user;
 
-const LOG_PREFIX = 'CHECK_USER_EXIST ROUTE';
+const LOG_PREFIX = 'CHECK_EMAIL ROUTE';
 function getCurrentTime() {
     return new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 }
@@ -11,18 +11,18 @@ function logMessage(msg) {
 }
 
 router.post('/', (req, res) => {
-  const req_username = req.body.username;
-  logMessage(`Username requested: ${req_username}`);
+  const req_email = req.body.email;
+  logMessage(`Email requested: ${req_email}`);
 
   user.findOne({
-    username: req_username
+    email: req_email
   }, (err, _user) => {
     if (_user) {
-      logMessage(`User exist`);
-      res.json({userexist: true});
+      logMessage(`Email is already using`);
+      res.json({emailexist: true});
     } else {
-      logMessage(`User not found`);
-      res.json({userexist: false});
+      logMessage(`Email not used`);
+      res.json({emailexist: false});
     }
   });
 });

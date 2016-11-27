@@ -1,21 +1,19 @@
-import React, { PropTypes, Component } from 'react';
-import classnames from 'classnames';
+import React from 'react';
 
 import Header from '../SiteHeader/Header.js';
 import LoginForm from './LoginForm.js';
 
 import './style.css';
 
-class Login extends Component {
+const Login = React.createClass({
   render() {
-    const {className, ...props} = this.props;
     return (
-      <div className={classnames('Login', className)}{...props}>
+      <div>
         <Header />
         <LoginForm />
       </div>
     );
   }
-}
+});
 
 export default Login;

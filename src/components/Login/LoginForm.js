@@ -1,43 +1,43 @@
 import React from 'react';
-import Router, { Link, browserHistory } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import $ from 'jquery';
-var isAuthorized = require('../isAuthorized');
+import md5 from 'js-md5';
 
 const LoginForm = React.createClass({
+  getInitialState() {
+    return {
+      logined: 'undefined'
+    }
+  },
   loginUser(){
     $.post(
       '/login',
     {
       username: document.getElementById('username').value,
-      password: document.getElementById('password').value
+      passwordHash: md5(document.getElementById('password').value)
     },
     (data) => {
-      isAuthorized = data.logined;
-      console.log(isAuthorized);
-      if (isAuthorized) {
+      if (data.logined) {
         browserHistory.push('/');
+      } else {
+        this.setState({logined:'error'});
       }
     });
   },
   render() {
     return (
       <section className="login">
-
-          <label for="username">
+          <label>
               Username
               <input type="text" name="username" id="username" />
           </label>
-
-          <label for="password">
+          <label>
               Password
               <input type="password" name="password" id="password" />
           </label>
-
-
           <button id="login-button" onClick={(e) => this.loginUser(e)} type="button">Login</button>
-          <p>
-            <Link to="/forgotpassword"><a id="login-ref">Forgot password</a></Link>
-          </p>
+          <Link id="login-ref" to="/forgotpassword">Forgot password</Link>
+          {this.state.logined == 'error' ? <p>Failed to login. Incorrect password or username</p> : ''}
       </section>
     )
   }

@@ -9,7 +9,6 @@ var CommentSchema = new Schema({
 });
 
 var PostSchema = new Schema({
-  id: Number,
   likes: Number,
   watches: Number,
   comments: [CommentSchema],
@@ -19,7 +18,6 @@ var PostSchema = new Schema({
 });
 
 var UserSchema = new Schema({
-  id: Number,
   username:  String,
   passwordHash: String,
   email: String,

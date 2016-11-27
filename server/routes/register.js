@@ -5,17 +5,23 @@ var fs = require('fs');
 var path = require('path');
 var user = require('../databaseutils').user;
 
+const LOG_PREFIX = 'REGISTER ROUTE';
+function getCurrentTime() {
+    return new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+}
+function logMessage(msg) {
+  console.log(getCurrentTime() + '     ' + LOG_PREFIX + '     ' + msg);
+}
+
 router.post('/', (req, res) => {
-  const email_ = req.body.email;
-  const uname = req.body.username;
-  const pass = req.body.password;
-  var passHash = md5(pass);
+  const req_email = req.body.email;
+  const req_username = req.body.username;
+  const req_passwordHash = req.body.passwordHash;
 
   var new_user = new user({
-    id: 0,
-    username: uname,
-    passwordHash: passHash,
-    email: email_,
+    username: req_username,
+    passwordHash: req_passwordHash,
+    email: req_email,
     age: 20,
     posts: [],
     image_extension: 'png',
@@ -25,8 +31,9 @@ router.post('/', (req, res) => {
 
   fs.writeFileSync(path.join(__dirname, '../public/userimages', md5(req.body.username) + '.png'),
                    fs.readFileSync(path.join(__dirname, '../public', 'default-user-image.png')));
+
   new_user.save(function(err, resp){
-    console.log('cool');
+    logMessage(`New user registered: ${req_username}`);
     res.json({
       status: true
     });
