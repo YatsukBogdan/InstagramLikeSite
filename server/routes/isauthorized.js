@@ -2,49 +2,62 @@ var express = require('express');
 var router = express.Router();
 var userConnection = require('../databaseutils').userConnection;
 
-router.post('/', (req, res) => {
-  const uname = req.session.username;
-  const token = req.session.token;
+const LOG_PREFIX = 'IS_AUTHORIZED ROUTE';
+function getCurrentTime() {
+    return new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+}
+function logMessage(msg) {
+  console.log(getCurrentTime() + '     ' + LOG_PREFIX + '     ' + msg);
+}
 
-  console.log('log: isAuthorized:' + uname);
-  if (token == undefined){
+router.post('/', (req, res) => {
+  const sess_username = req.session.username;
+  const sess_token = req.session.token;
+
+  logMessage(`Requested ${sess_username}`);
+  if (sess_token == undefined){
+    logMessage(`User ${sess_username} has no token.`);
     res.json({
       isAuthorized: false,
-      username: uname,
+      currentUser: sess_username,
       restriction: 'guest'
     });
     return;
   }
 
   userConnection.findOne({
-    username: uname
+    username: sess_username
   }, (err, connection) => {
     if (err){
+      logMessage(`Error on database call.`);
       res.json({
         isAuthorized: false,
-        username: uname,
+        currentUser: sess_username,
         restriction: connection.restriction
       });
       return;
     }
     if (connection) {
-      if (token == connection.token){
+      if (sess_token == connection.token){
+        logMessage(`User ${sess_username} is authorized.`);
         res.json({
           isAuthorized: true,
-          username: uname,
+          currentUser: sess_username,
           restriction: connection.restriction
         });
       } else {
+        logMessage(`User's ${sess_username} token didn't match the one on the server side.`);
         res.json({
           isAuthorized: false,
-          username: uname,
+          currentUser: sess_username,
           restriction: connection.restriction
         });
       }
     } else {
+      logMessage(`User ${sess_username} has no connection.`);
       res.json({
         isAuthorized: false,
-        username: uname,
+        currentUser: sess_username,
         restriction: connection.restriction
       });
     }

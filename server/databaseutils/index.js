@@ -9,6 +9,7 @@ var CommentSchema = new Schema({
 });
 
 var PostSchema = new Schema({
+  likedBy: [String],
   likes: Number,
   watches: Number,
   comments: [CommentSchema],

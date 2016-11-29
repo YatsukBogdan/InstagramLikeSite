@@ -9,6 +9,7 @@ const multer = require('multer');
 
 var login = require('./routes/login');
 var logOut = require('./routes/logout');
+var likePost = require('./routes/likepost');
 var isPageOwner = require('./routes/ispageowner');
 var register = require('./routes/register');
 var checkUserExist = require('./routes/checkuserexist');
@@ -21,6 +22,7 @@ var getUserImage = require('./routes/getuserimage');
 var getUserPostImage = require('./routes/getuserpostimage');
 var getUserTmpPostImage = require('./routes/getusertmppostimage');
 var loadUserData = require('./routes/loaduserdata');
+var loadUserPosts = require('./routes/loaduserposts');
 var isAuthorized = require('./routes/isauthorized');
 var uploadImage = require('./routes/uploadimage');
 var uploadPostImage = require('./routes/uploadpostimage');
@@ -28,6 +30,11 @@ var uploadPost = require('./routes/uploadpost');
 
 
 const app = express();
+const io = require('socket.io')(app);
+
+io.on('like', (socket) => {
+  socket.emit();
+});
 
 // Setup logger
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
@@ -56,6 +63,7 @@ app.use(expressSession({
 // Always return the main index.html, so react-router render the route in the client
 app.use('/login', login);
 app.use('/logout', logOut);
+app.use('/likepost', likePost);
 app.use('/ispageowner', isPageOwner);
 app.use('/register', register);
 app.use('/checkuserexist', checkUserExist);
@@ -65,6 +73,7 @@ app.use('/findusers', findUsers);
 app.use('/deleteuser', deleteUser);
 app.use('/restorepassword', restorePassword);
 app.use('/loaduserdata', loadUserData);
+app.use('/loaduserposts', loadUserPosts);
 app.use('/getuserimage', getUserImage);
 app.use('/getuserpostimage', getUserPostImage);
 app.use('/getusertmppostimage', getUserTmpPostImage);

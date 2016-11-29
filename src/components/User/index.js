@@ -16,7 +16,6 @@ import './style.css';
 const User = React.createClass({
   componentDidMount() {
     this.checkUserExist();
-    this.loadUserData();
     isAuthorized(this);
     this.isOwner();
   },
@@ -31,13 +30,11 @@ const User = React.createClass({
   getInitialState() {
     return {
       isAuthorized: false,
+      currentUser: 'default',
+      restriction: 'user',
       userexist: false,
-      email: '',
-      age: 0,
-      posts: [],
       moduleVisible: false,
-      isOwner: false,
-      restriction: 'user'
+      isOwner: false
     }
   },
   isOwner(){
@@ -51,21 +48,6 @@ const User = React.createClass({
       }
     );
   },
-  loadUserData() {
-    $.post(
-      '/loaduserdata',
-      {
-        username: this.props.params.username
-      },
-      (data) => {
-        this.setState({
-          email: data.email,
-          age: data.age,
-          posts: data.posts
-        });
-      }
-    );
-  },
   checkUserExist() {
     $.post(
       '/checkuserexist',
@@ -76,17 +58,6 @@ const User = React.createClass({
         this.setState({userexist: data.userexist});
       }
     );
-  },
-  renderUserPosts() {
-    if (this.state.posts) {
-      return (
-        <UserPosts username={this.props.params.username} posts={this.state.posts} />
-      );
-    } else {
-      return (
-        <p>User have no posts yet</p>
-      );
-    }
   },
   deleteUser() {
     $.post(
@@ -105,13 +76,13 @@ const User = React.createClass({
         <div>
           <div className="container">
             <UserImageBlock username={this.props.params.username} isOwner={this.state.isOwner}/>
-            <UserData username={this.props.params.username} age={this.state.age} email={this.state.email}/>
+            <UserData username={this.props.params.username} />
             {this.state.isOwner ? <button onClick={e => this.openModule(e)}>Add post</button> : ''}
             {this.state.restriction == 'admin' ? <button onClick={e => this.deleteUser(e)}>Delete this user</button> : ''}
             <CreatePostModule username={this.props.params.username} visible={this.state.moduleVisible} closeModule={this.closeModule}/>
           </div>
           <div className="container">
-            {this.renderUserPosts()}
+            <UserPosts isAuthorized={this.state.isAuthorized} username={this.props.params.username} currentUser={this.state.currentUser}/>
           </div>
         </div>
       );

@@ -10,8 +10,7 @@ router.post('/', (req, res) => {
   }, (err, _user) => {
     if (_user) {
       res.json({
-        email: _user.email,
-        age: _user.age
+        posts: _user.posts
       });
     }
   });

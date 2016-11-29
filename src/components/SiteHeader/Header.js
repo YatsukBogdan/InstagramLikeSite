@@ -19,7 +19,7 @@ const Header = React.createClass({
   getInitialState() {
     return {
       isAuthorized: false,
-      username: 'default'
+      currentUser: 'default'
     }
   },
   logout() {
@@ -60,7 +60,7 @@ const Header = React.createClass({
           <input className="col-md-4" id='find-user-input' type="text" name='username'/>
           {this.renderLoginBlock()}
         </div>
-        {this.state.isAuthorized ? <a href={'/user/' + this.state.username}>My profile</a> : ''}
+        {this.state.isAuthorized ? <a href={'/user/' + this.state.currentUser}>My profile</a> : ''}
       </div>
     );
   }

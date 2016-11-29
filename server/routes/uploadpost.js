@@ -47,6 +47,7 @@ router.post('/', upload.single('image'), (req, res) => {
       var post_id = this_user.posts.length;
       this_user.posts.push({
         id: post_id,
+        likedBy: [],
         likes: 0,
         watches: 0,
         comments: [],

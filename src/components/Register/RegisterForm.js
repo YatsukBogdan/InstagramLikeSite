@@ -46,15 +46,15 @@ const RegisterForm = React.createClass({
       username: document.getElementById('username').value,
       passwordHash: md5(document.getElementById('password').value)
     },
-    (data) => {
+    (reg_data) => {
       $.post(
         '/login',
       {
         username: document.getElementById('username').value,
-        password: document.getElementById('password').value
+        password: md5(document.getElementById('password').value)
       },
-      (data) => {
-        if (data.logined) {
+      (login_data) => {
+        if (login_data.logined) {
           browserHistory.push('/');
         }
       });
@@ -73,7 +73,7 @@ const RegisterForm = React.createClass({
       this.setState({badPassword: true});
     }
 
-    this.checkRegisterButtonAvailability();
+    this.checkPasswordEqual();
   },
   checkPasswordEqual() {
     var password = document.getElementById('password').value;
@@ -122,7 +122,7 @@ const RegisterForm = React.createClass({
           </label>
           {this.state.secondPasswordEqual ? '' : <p>Password didnt match</p>}
 
-          <button id="register-button" onClick={(e) => this.registerUser(e)} disabled={this.state.buttonDisabled} >Register</button>
+          <button id="register-button" onClick={(e) => this.registerUser(e)}>Register</button>
       </section>
     )
   }
