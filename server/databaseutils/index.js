@@ -2,10 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CommentSchema = new Schema({
-  username: Number,
-  likes: Number,
+  username: String,
   date: Date,
-  body: String
+  text: String
 });
 
 var PostSchema = new Schema({

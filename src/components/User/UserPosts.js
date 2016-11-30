@@ -41,7 +41,8 @@ const UserPosts = React.createClass({
                            sign={this.state.posts[i].author_sign}
                            comments={this.state.posts[i].comments}
                            id={i}
-                           isAuthorized={this.props.isAuthorized}/>);
+                           isAuthorized={this.props.isAuthorized}
+                           socket={this.props.socket} />);
     }
     return (
       <div>{posts}</div>

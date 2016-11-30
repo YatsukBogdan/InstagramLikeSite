@@ -18,6 +18,10 @@ const User = React.createClass({
     this.checkUserExist();
     isAuthorized(this);
     this.isOwner();
+    this.props.route.socket.on('news', function (data) {
+      console.log(data);
+      this.props.route.socket.emit('my other event', { my: 'data' });
+    });
   },
   openModule() {
     this.setState({moduleVisible: true});
@@ -82,7 +86,10 @@ const User = React.createClass({
             <CreatePostModule username={this.props.params.username} visible={this.state.moduleVisible} closeModule={this.closeModule}/>
           </div>
           <div className="container">
-            <UserPosts isAuthorized={this.state.isAuthorized} username={this.props.params.username} currentUser={this.state.currentUser}/>
+            <UserPosts isAuthorized={this.state.isAuthorized}
+                       username={this.props.params.username}
+                       currentUser={this.state.currentUser}
+                       socket={this.props.route.socket}/>
           </div>
         </div>
       );
