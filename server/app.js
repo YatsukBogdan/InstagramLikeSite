@@ -13,6 +13,7 @@ var login = require('./routes/login');
 var logOut = require('./routes/logout');
 var likePost = require('./routes/likepost');
 var reloadPostLikes = require('./routes/reloadpostlikes');
+var reloadPostComments = require('./routes/reloadpostcomments');
 var isPageOwner = require('./routes/ispageowner');
 var register = require('./routes/register');
 var comment = require('./routes/comment');
@@ -70,7 +71,7 @@ io.on('connection', function (socket) {
                 logMessage(`Error on saving like state on database call`);
               }
               logMessage(`Post ${post_id} of user ${post_username} unliked by ${sess_username}`);
-              io.sockets.emit('onlike');
+              io.sockets.emit('onlike', {likes: _user.posts[post_id].likes});
             });
             return;
           }
@@ -84,10 +85,44 @@ io.on('connection', function (socket) {
             return;
           }
           logMessage(`Post ${post_id} of user ${post_username} liked by ${sess_username}`);
-          io.sockets.emit('onlike');
+          io.sockets.emit('onlike', {likes: _user.posts[post_id].likes});
         });
       } else {
         logMessage(`There is no ${post_username} in the database`);
+      }
+    });
+  }),
+  socket.on('commentpost', (data) => {
+    const comment = data.comment;
+    const sess_username = data.currentUser;
+    const post_username = data.username;
+    const post_id = data.post_id;
+
+    user.findOne({
+      username: post_username
+    }, (err, _user) => {
+      if (err){
+        logMessage('Error on database call');
+        return;
+      }
+      if (_user){
+        _user.posts[post_id].comments.push({
+          username: sess_username,
+          date: new Date(),
+          text: comment
+        });
+        _user.save( (err) => {
+          if (err){
+            logMessage(`Error on saving comment on database call`);
+            logMessage(err);
+            return;
+          }
+          logMessage(`Post ${post_id} of user ${post_username} commented by ${sess_username}`);
+          io.sockets.emit('oncomment', {comments: _user.posts[post_id].comments});
+        });
+      } else {
+        logMessage(`There is no ${post_username} in the database`);
+        return;
       }
     });
   })
@@ -121,6 +156,7 @@ app.use('/login', login);
 app.use('/logout', logOut);
 app.use('/likepost', likePost);
 app.use('/reloadpostlikes', reloadPostLikes);
+app.use('/reloadpostcomments', reloadPostComments);
 app.use('/ispageowner', isPageOwner);
 app.use('/register', register);
 app.use('/comment', comment);

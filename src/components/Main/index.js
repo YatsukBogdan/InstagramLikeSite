@@ -7,13 +7,6 @@ import isAuthorized from '../isAuthorized';
 import './style.css';
 
 const Main = React.createClass({
-  componentDidMount() {
-    this.props.route.socket.on('news', function (data) {
-      console.log(data);
-      this.props.route.socket.emit('my other event', { my: 'data' }
-    );
-  });
-  },
   getInitialState() {
     isAuthorized(this);
     return {
